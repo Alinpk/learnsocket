@@ -1,0 +1,22 @@
+<arpa/inet.h>
+	unsigned long inet_addr();//传入一个字符串类型的ipv4地址并将其转换为无符号长整型数据
+	char *inet_ntoa(struct in_addr in);//将地址结构转化为点分十进制ip地址
+	int inet_aton(const char *cp,struct in_addr *inp);//将cp转ul并在inp输出
+	in_addr_t inet_addr(const char *cp);
+
+
+套接字类型
+	流式套接字（SOCK_STREAM） TCP
+	数据报式套接字（SOCK_DGRAM） 无连接不可靠
+	原始套接字（SOCK_RAW） 跨越传输层直接将应用层数据封装为IP层可识别的协议格式
+
+
+
+例1:TCP/IP
+	包含头文件<sys/socket.h>
+	int socket(int domain,int type,int protocol);//domain指定通信协议族，指定socket类型，上面已经提到3种常用类型，协议类型。成功返回非负整数，失败-1
+	int bind(int sockfd,const sruct sockaddr* addr,socklen_t addrlen);//绑定一个本地地址到套接字,sockfd:socket函数所返回的套接字，addr：要绑定的地址，addrlen：地址长度，成功0，失败-1
+	int listen(int sockfd,int backlog);将套接字用于监听进入的连接，sockfd:socket函数返回的套接字，backlog:规定内核为此套接字排队的最大连接个数
+	对于处于监听状态的套接口，内核需要维护两个队列：1由客户发出并到达服务器，服务器正在等待完成相应TCP三路握手过程（SYN_RCVD状态）2已完成连接的队列 （ESTABLISHED状态），其中listen中参数指两种状态队列总长
+	int accept(int sockfd,struct sockaddr *addr,socklen_t *addrlen);//从已完成队列返回第一个连接，如果已完成队列为空，则阻塞。addr:返回对等方的套接字地址；addrlen：返回对等方套接字地址长度，成功返回非负整数，失败返回-1,其中返回值为对方套接字
+
